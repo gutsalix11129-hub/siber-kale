@@ -1,63 +1,71 @@
-<div class="panel">
-  <div class="panel-header">
-    <span>📌 Son Eklenen Konular</span>
-    <a href="/posts/new" class="btn" style="padding: 5px 15px; font-size: 0.8em;">+ Yeni Konu</a>
-  </div>
-  <div class="panel-body" style="padding: 0;">
-    
+<div class="flex justify-between items-center mb-4">
+  <h1 class="text-xl font-bold text-white"><%= activeCat === 'Tümü' || !activeCat ? 'Son Eklenen Konular' : activeCat + ' Kategorisi' %></h1>
+  <a href="/posts/new" class="bg-primary text-black px-4 py-2 rounded text-sm font-bold hover:bg-white transition"><i class="fas fa-plus mr-1"></i>Konu Aç</a>
+</div>
+
+<div class="bg-panel rounded-lg border border-border overflow-hidden">
+  <div class="divide-y divide-border">
     <% if (posts.length === 0) { %>
-      <div style="padding: 20px; text-align: center; color: var(--text-muted);">Henüz konu açılmamış.</div>
+      <div class="p-8 text-center text-gray-500">Bu kategoride henüz konu yok.</div>
     <% } %>
 
     <% posts.forEach((post) => { %>
-      <div style="border-bottom: 1px solid var(--border);">
-        <div class="topic-item">
-          <div class="topic-icon">💬</div>
-          <div class="topic-info">
-            <a href="#" class="topic-title"><%= post.title %></a>
-            <div class="topic-meta">
-              <span style="color: var(--primary);"># <%= post.category %></span>
-              <span>👤 <%= post.username %></span>
-              <span>👍 <%= post.like_count %> Beğeni</span>
-              <span>🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></span>
+      <div class="p-4 hover:bg-[#1c2128] transition group">
+        <div class="flex gap-4">
+          
+          <div class="flex flex-col items-center justify-center bg-darkbg rounded-md border border-border w-12 py-2 flex-shrink-0">
+            <% if (user) { %>
+              <form method="post" action="/posts/<%= post.id %>/like">
+                <button type="submit" class="<%= post.has_liked ? 'text-primary' : 'text-gray-500 hover:text-primary' %> transition text-lg"><i class="fas fa-chevron-up"></i></button>
+              </form>
+            <% } else { %>
+              <i class="fas fa-chevron-up text-gray-600 text-lg"></i>
+            <% } %>
+            <span class="text-white font-bold text-sm my-1"><%= post.like_count %></span>
+          </div>
+
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="bg-[#21262d] text-primary border border-border text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider"><%= post.category %></span>
+              <span class="text-gray-500 text-xs"><i class="far fa-clock mr-1"></i><%= new Date(post.created_at).toLocaleString('tr-TR') %></span>
+            </div>
+            
+            <a href="#" class="text-lg font-bold text-white group-hover:text-primary transition"><%= post.title %></a>
+            
+            <div class="text-sm text-gray-400 mt-2 markdown-body line-clamp-3">
+              <%- parseMarkdown(post.body) %>
+            </div>
+            
+            <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+              <div class="flex items-center">
+                <div class="h-5 w-5 rounded bg-gray-700 flex items-center justify-center text-white font-bold text-[10px] mr-1"><%= post.username ? post.username[0].toUpperCase() : 'U' %></div>
+                <span class="text-gray-300 font-semibold"><%= post.username %></span>
+              </div>
+              <span><i class="far fa-comment-alt mr-1"></i><%= post.comment_count %> Yorum</span>
             </div>
           </div>
         </div>
-        
-        <!-- Konu İçeriği ve Yorumlar -->
-        <div style="padding: 0 20px 20px 75px;">
-          <div class="markdown-body" style="margin-bottom: 15px; color: #a0a0a0;">
-            <%- parseMarkdown(post.body) %>
-          </div>
-          
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <% if (user) { %>
-              <form method="post" action="/posts/<%= post.id %>/like" style="margin: 0;">
-                <button type="submit" class="<%= post.has_liked ? '' : 'btn-outline' %>" style="padding: 5px 10px; font-size: 0.8em;">
-                  👍 <%= post.has_liked ? 'Beğendin' : 'Beğen' %>
-                </button>
-              </form>
-            <% } %>
-            <span style="font-size: 0.85em; color: var(--text-muted);"><%= post.comment_count %> Yorum</span>
-          </div>
 
-          <!-- Yorum Alanı -->
-          <div style="margin-top: 15px; padding-left: 15px; border-left: 2px solid var(--border);">
+        <!-- Yorumlar -->
+        <% if (post.comments.length > 0 || user) { %>
+          <div class="mt-4 ml-16 pl-4 border-l-2 border-border space-y-3">
             <% post.comments.forEach(c => { %>
-              <div style="margin-bottom: 10px; background: #0d1117; padding: 10px; border-radius: 4px;">
-                <span style="color: var(--primary); font-weight: bold; font-size: 0.85em;"><%= c.username %>:</span>
-                <span style="font-size: 0.9em;"><%= c.body %></span>
+              <div class="bg-darkbg p-3 rounded-md border border-border text-sm">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="text-primary font-bold text-xs"><i class="fas fa-user-circle mr-1"></i><%= c.username %></span>
+                </div>
+                <p class="text-gray-300"><%= c.body %></p>
               </div>
             <% }) %>
             
             <% if (user) { %>
-              <form method="post" action="/posts/<%= post.id %>/comment" style="display: flex; gap: 10px; margin-top: 10px;">
-                <input name="body" placeholder="Yorumunu yaz..." required style="margin: 0; padding: 8px; font-size: 0.9em;">
-                <button type="submit" style="padding: 8px 15px; font-size: 0.8em;">Gönder</button>
+              <form method="post" action="/posts/<%= post.id %>/comment" class="flex gap-2">
+                <input name="body" placeholder="Yorumunu yaz..." required class="flex-1 bg-darkbg border border-border rounded px-3 py-1.5 text-sm text-white focus:outline-none focus:border-primary">
+                <button type="submit" class="bg-[#21262d] text-gray-300 hover:text-white px-3 py-1.5 rounded text-sm border border-border transition"><i class="fas fa-paper-plane"></i></button>
               </form>
             <% } %>
           </div>
-        </div>
+        <% } %>
       </div>
     <% }) %>
   </div>
