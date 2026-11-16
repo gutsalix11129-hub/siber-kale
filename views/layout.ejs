@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title %> | SiberKale</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 16px; line-height: 1.5; background-color: #f9f9f9; color: #333; }
+    header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #0056b3; padding-bottom: 12px; margin-bottom: 24px; }
+    header a { margin-right: 8px; color: #0056b3; text-decoration: none; font-weight: bold; }
+    header a:hover { text-decoration: underline; }
+    article { background: white; border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    input, textarea, button { font: inherit; padding: 8px; margin: 4px 0; border: 1px solid #ccc; border-radius: 4px; }
+    button { background-color: #0056b3; color: white; cursor: pointer; border: none; padding: 10px 15px; }
+    button:hover { background-color: #004494; }
+    textarea { width: 100%; min-height: 120px; box-sizing: border-box; }
+    .muted { color: #666; font-size: 0.9em; }
+    .prewrap { white-space: pre-wrap; }
+    footer { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 16px; font-size: 0.85em; color: #555; text-align: center; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong><a href="/" style="font-size: 1.2em; color: #003366;">🛡️ SiberKale</a></strong>
+    <% if (user) { %>
+      <a href="/">Akış</a>
+      <a href="/rooms">Odalar</a>
+      <a href="/posts/new">Yeni Paylaşım</a>
+      <% if (user.role === 'admin') { %><a href="/admin" style="color: red;">Admin Paneli</a><% } %>
+      <span class="muted" style="margin-left: auto;"><%= user.email %></span>
+      <form method="post" action="/logout" style="display:inline">
+        <button type="submit" style="background-color: #dc3545;">Çıkış</button>
+      </form>
+    <% } else { %>
+      <a href="/login" style="margin-left: auto;">Giriş Yap</a>
+      <a href="/register">Kayıt Ol</a>
+    <% } %>
+  </header>
+
+  <main>
+    <%- body %>
+  </main>
+
+  <footer>
+    SiberKale - Yasal Siber Güvenlik Topluluğu<br>
+    Bu platform yalnızca etik hacking, savunma ve eğitim içerikleri içindir. Yasadışı faaliyetler yasaktır.
+  </footer>
+</body>
+</html>
