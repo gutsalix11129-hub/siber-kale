@@ -6,48 +6,25 @@
   <title><%= title %> | NullSec</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Kod Renklendirme Kütüphanesi -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
   <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            darkbg: '#0d1117',
-            panel: '#161b22',
-            border: '#30363d',
-            primary: '#00ff41',
-          }
-        }
-      }
-    }
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { darkbg: '#0d1117', panel: '#161b22', border: '#30363d', primary: '#00ff41' } } } }
   </script>
   <style>
     body { background-color: #0d1117; color: #c9d1d9; }
-    .markdown-body pre { background: #010409; padding: 15px; border-radius: 6px; border: 1px solid #30363d; color: #00ff41; overflow-x: auto; }
-    .markdown-body code { font-family: 'Courier New', monospace; }
+    .markdown-body pre { padding: 0; border-radius: 6px; overflow-x: auto; }
   </style>
 </head>
 <body class="antialiased font-sans">
   
-  <!-- NAVBAR -->
   <nav class="bg-panel border-b border-border sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-16">
-        <div class="flex items-center">
-          <a href="/" class="text-2xl font-black text-white tracking-widest">
-            NULL<span class="text-primary">SEC</span>
-          </a>
-        </div>
-        <div class="hidden md:block">
-          <div class="ml-10 flex items-baseline space-x-4">
-            <a href="/" class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition"><i class="fas fa-home mr-2"></i>Forum</a>
-            <a href="/rooms" class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition"><i class="fas fa-comments mr-2"></i>Odalar</a>
-            <a href="/posts/new" class="hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition"><i class="fas fa-plus-circle mr-2"></i>Konu Aç</a>
-            <% if (user && user.role === 'admin') { %>
-              <a href="/admin" class="text-red-500 hover:text-red-400 px-3 py-2 rounded-md text-sm font-bold transition"><i class="fas fa-shield-alt mr-2"></i>Admin</a>
-            <% } %>
-          </div>
-        </div>
+        <a href="/" class="text-2xl font-black text-white tracking-widest">NULL<span class="text-primary">SEC</span></a>
         
         <div class="flex items-center space-x-4">
           <% if (user) { %>
@@ -60,45 +37,68 @@
                 <% let rank = getRank(user.points || 0); %>
                 <span class="text-xs <%= rank.color %> leading-tight"><i class="fas <%= rank.icon %> mr-1"></i><%= rank.name %></span>
               </div>
-              <form method="post" action="/logout" class="ml-3">
-                <button type="submit" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-sign-out-alt"></i></button>
-              </form>
+              <form method="post" action="/logout" class="ml-3"><button type="submit" class="text-gray-400 hover:text-red-500 transition"><i class="fas fa-sign-out-alt"></i></button></form>
             </div>
           <% } else { %>
             <a href="/login" class="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium">Giriş</a>
-            <a href="/register" class="bg-primary text-black hover:bg-white px-4 py-2 rounded-md text-sm font-bold transition shadow-[0_0_10px_rgba(0,255,65,0.3)]">Kayıt Ol</a>
+            <a href="/register" class="bg-primary text-black hover:bg-white px-4 py-2 rounded-md text-sm font-bold transition">Kayıt Ol</a>
           <% } %>
         </div>
       </div>
     </div>
   </nav>
 
-  <!-- MAIN CONTENT -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row gap-6">
     
-    <!-- SIDEBAR -->
+    <!-- SOL MENÜ (KATEGORİLER) -->
     <aside class="w-full md:w-64 flex-shrink-0 space-y-4">
       <div class="bg-panel rounded-lg border border-border overflow-hidden">
-        <div class="bg-[#21262d] px-4 py-3 border-b border-border font-bold text-white text-sm">
-          <i class="fas fa-bars mr-2 text-primary"></i>Kategoriler
-        </div>
+        <div class="bg-[#21262d] px-4 py-3 border-b border-border font-bold text-white text-sm"><i class="fas fa-list mr-2 text-primary"></i>Kategoriler</div>
         <div class="p-2 space-y-1">
-          <a href="/" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary"><i class="fas fa-globe text-gray-500 mr-2"></i>Genel Sohbet</a>
-          <a href="#" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary"><i class="fas fa-bug text-red-500 mr-2"></i>Zafiyetler</a>
-          <a href="#" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary"><i class="fas fa-flag text-blue-500 mr-2"></i>CTF Çözümleri</a>
-          <a href="#" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary"><i class="fas fa-tools text-yellow-500 mr-2"></i>Araçlar</a>
+          <a href="/" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary <%= activeCat === 'Tümü' || !activeCat ? 'bg-[#21262d] text-primary' : '' %>"><i class="fas fa-globe text-gray-500 mr-2"></i>Tüm Konular</a>
+          <% categories.forEach(cat => { %>
+            <a href="/?cat=<%= cat.name %>" class="block px-3 py-2 rounded-md text-sm text-gray-300 hover:bg-[#21262d] hover:text-primary <%= activeCat === cat.name ? 'bg-[#21262d] text-primary' : '' %>"><i class="fas <%= cat.icon %> text-gray-500 mr-2"></i><%= cat.name %></a>
+          <% }) %>
         </div>
+      </div>
+      
+      <div class="bg-panel rounded-lg border border-border p-4 text-sm space-y-2">
+        <div class="flex justify-between text-gray-400"><span>Toplam Üye:</span> <span class="text-white font-bold"><%= stats.users %></span></div>
+        <div class="flex justify-between text-gray-400"><span>Toplam Konu:</span> <span class="text-white font-bold"><%= stats.posts %></span></div>
       </div>
     </aside>
 
-    <!-- DYNAMIC BODY -->
+    <!-- ORTA ALAN (KONULAR) -->
     <main class="flex-1">
       <%- body %>
     </main>
+
+    <!-- SAĞ MENÜ (SHOUTBOX) -->
+    <aside class="w-full md:w-72 flex-shrink-0 space-y-4">
+      <div class="bg-panel rounded-lg border border-border overflow-hidden">
+        <div class="bg-[#21262d] px-4 py-3 border-b border-border font-bold text-white text-sm flex justify-between">
+          <span><i class="fas fa-comments text-primary mr-2"></i>Shoutbox</span>
+          <span class="text-xs text-gray-500 font-normal mt-1">Anlık Sohbet</span>
+        </div>
+        <div class="p-3 h-64 overflow-y-auto space-y-2 text-sm" id="shoutbox-container">
+          <% shoutbox.forEach(s => { %>
+            <div class="break-words"><span class="text-primary font-bold"><%= s.username %>:</span> <span class="text-gray-300"><%= s.message %></span></div>
+          <% }) %>
+        </div>
+        <% if (user) { %>
+          <form method="post" action="/shoutbox" class="p-2 border-t border-border flex gap-2">
+            <input name="message" placeholder="Mesaj yaz..." required maxlength="100" class="flex-1 bg-darkbg border border-border rounded px-2 py-1.5 text-sm text-white focus:outline-none focus:border-primary">
+            <button type="submit" class="text-primary hover:text-white transition px-2"><i class="fas fa-paper-plane"></i></button>
+          </form>
+        <% } else { %>
+          <div class="p-3 border-t border-border text-center text-xs text-gray-500">Mesaj yazmak için giriş yapın.</div>
+        <% } %>
+      </div>
+    </aside>
   </div>
 
   <footer class="border-t border-border mt-12 py-8 text-center text-gray-500 text-sm">
-    <p>NullSec &copy; 2024 - Yasalara saygılı siber güvenlik topluluğu.</p>
+    <p>NullSec &copy; 2024 - Yasal siber güvenlik platformu.</p>
   </footer>
 </body>
 </html>
