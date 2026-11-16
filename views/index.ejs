@@ -1,31 +1,50 @@
-<h1>Siber Güvenlik Akışı</h1>
-<p class="muted">Topluluk tarafından paylaşılan onaylı içerikler.</p>
+<h1 style="color: white;">Siber Güvenlik Akışı</h1>
 
 <% if (posts.length === 0) { %>
-  <article>
-    <p>Henüz onaylı bir paylaşım yok. İlk paylaşımı sen yapmak ister misin?</p>
-    <% if (user) { %>
-      <a href="/posts/new"><button>Yeni Paylaşım Yap</button></a>
-    <% } else { %>
-      <a href="/login"><button>Giriş Yap ve Paylaş</button></a>
-    <% } %>
+  <article style="text-align: center;">
+    <h2>Henüz paylaşım yok.</h2>
+    <p class="muted">İlk zafiyet notunu veya CTF çözümünü sen paylaş!</p>
   </article>
 <% } %>
 
 <% posts.forEach((post) => { %>
   <article>
-    <h2><%= post.title %></h2>
+    <h2 style="margin-top: 0; color: var(--primary);"><%= post.title %></h2>
     <p class="prewrap"><%= post.body %></p>
     <p class="muted">👤 <%= post.email %> — 🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></p>
 
-    <% if (user) { %>
-      <details style="margin-top: 10px;">
-        <summary style="cursor: pointer; color: #dc3545; font-size: 0.9em;">Şikayet Et</summary>
-        <form method="post" action="/posts/<%= post.id %>/report" style="margin-top: 10px;">
-          <input name="reason" placeholder="Şikayet nedeni (örn: kural dışı içerik)" required maxlength="500" style="width: 100%;">
-          <button type="submit" style="background-color: #dc3545; margin-top: 5px;">Gönder</button>
+    <div style="display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
+      
+      <!-- BEĞENİ BUTONU -->
+      <% if (user) { %>
+        <form method="post" action="/posts/<%= post.id %>/like" style="margin: 0;">
+          <button type="submit" class="secondary" style="padding: 6px 12px; font-size: 0.9em; color: <%= post.has_liked ? 'var(--success)' : 'var(--text)' %>; border: 1px solid <%= post.has_liked ? 'var(--success)' : 'var(--border)' %>;">
+            <%= post.has_liked ? '👍 Beğendin' : '👍 Beğen' %> (<%= post.like_count %>)
+          </button>
         </form>
-      </details>
-    <% } %>
+      <% } else { %>
+         <span class="muted">👍 <%= post.like_count %> Beğeni</span>
+      <% } %>
+
+      <span class="muted" style="padding: 6px 0;">💬 <%= post.comment_count %> Yorum</span>
+    </div>
+
+    <!-- YORUMLAR -->
+    <div style="margin-top: 15px; padding-left: 10px; border-left: 2px solid var(--border);">
+      <% post.comments.forEach(c => { %>
+        <div style="margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px;">
+          <p style="margin: 0; font-size: 0.95em;"><%= c.body %></p>
+          <span class="muted" style="font-size: 0.75em;">👤 <%= c.email %> - <%= new Date(c.created_at).toLocaleString('tr-TR') %></span>
+        </div>
+      <% }) %>
+
+      <!-- YORUM YAPMA FORMU -->
+      <% if (user) { %>
+        <form method="post" action="/posts/<%= post.id %>/comment" style="display: flex; gap: 10px; margin-top: 10px;">
+          <input name="body" placeholder="Bir yorum yaz..." required maxlength="500" style="padding: 8px; font-size: 0.9em;">
+          <button type="submit" style="width: auto; padding: 8px 15px; font-size: 0.9em;">Gönder</button>
+        </form>
+      <% } %>
+    </div>
   </article>
 <% }) %>
