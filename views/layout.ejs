@@ -3,61 +3,116 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= title %> | SiberKale</title>
+  <title><%= title %> | NullSec Forum</title>
   <style>
-    :root { --bg: #0d1117; --panel: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --primary: #58a6ff; --danger: #f85149; --success: #238636; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); max-width: 900px; margin: 0 auto; padding: 16px; line-height: 1.6; }
-    header { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
-    header a { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.95em; }
-    header a:hover { text-decoration: underline; }
-    .logo { font-size: 1.3em; font-weight: bold; color: #fff; letter-spacing: 1px; }
-    .logo span { color: var(--success); }
-    article { background-color: var(--panel); border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; border-radius: 8px; }
-    input, textarea, button { font: inherit; padding: 10px; margin: 4px 0; border: 1px solid var(--border); border-radius: 6px; background-color: var(--bg); color: var(--text); width: 100%; box-sizing: border-box; }
-    input:focus, textarea:focus { border-color: var(--primary); outline: none; }
-    button { background-color: var(--success); color: white; cursor: pointer; font-weight: bold; border: none; transition: 0.2s; }
-    button:hover { background-color: #2ea043; }
-    button.danger { background-color: var(--danger); }
-    button.danger:hover { background-color: #da3633; }
-    button.secondary { background-color: var(--border); }
-    button.secondary:hover { background-color: #4b535d; }
-    .muted { color: var(--text-muted); font-size: 0.85em; }
-    .prewrap { white-space: pre-wrap; font-family: "Courier New", Courier, monospace; background: #000; padding: 15px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; }
-    footer { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 16px; font-size: 0.85em; color: var(--text-muted); text-align: center; }
-    .user-info { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-    .user-info button { width: auto; padding: 5px 10px; font-size: 0.8em; }
+    :root { --bg: #050505; --panel: #0d1117; --border: #21262d; --text: #c9d1d9; --text-muted: #8b949e; --primary: #00ff41; --danger: #f85149; }
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
+    
+    /* Üst Bar */
+    .navbar { background-color: var(--panel); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 1.5em; font-weight: 900; color: #fff; text-decoration: none; letter-spacing: 2px; }
+    .logo span { color: var(--primary); text-shadow: 0 0 10px var(--primary); }
+    
+    .nav-links { display: flex; gap: 20px; align-items: center; }
+    .nav-links a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.9em; transition: 0.2s; }
+    .nav-links a:hover { color: var(--primary); }
+    
+    .user-badge { display: flex; align-items: center; gap: 10px; background: #161b22; padding: 5px 15px; border-radius: 20px; border: 1px solid var(--border); }
+    .user-badge img { width: 30px; height: 30px; border-radius: 50%; background: #333; }
+    
+    /* Ana İçerik Alanı */
+    .container { display: flex; max-width: 1200px; margin: 20px auto; padding: 0 15px; gap: 20px; }
+    .main-content { flex: 1; }
+    .sidebar { width: 300px; flex-shrink: 0; }
+    
+    /* Paneller */
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 20px; overflow: hidden; }
+    .panel-header { background: #161b22; padding: 12px 20px; border-bottom: 1px solid var(--border); font-weight: bold; color: #fff; display: flex; justify-content: space-between; align-items: center; }
+    .panel-body { padding: 20px; }
+    
+    /* Butonlar ve Formlar */
+    button, .btn { background-color: var(--primary); color: #000; cursor: pointer; font-weight: bold; border: none; padding: 10px 20px; border-radius: 6px; text-transform: uppercase; font-size: 0.85em; transition: 0.2s; text-decoration: none; display: inline-block; }
+    button:hover, .btn:hover { background-color: #fff; box-shadow: 0 0 15px var(--primary); }
+    .btn-danger { background-color: var(--danger); color: #fff; }
+    .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    
+    input, textarea, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #010409; border: 1px solid var(--border); border-radius: 6px; color: #fff; font-family: inherit; }
+    input:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 5px rgba(0,255,65,0.3); }
+    
+    /* Forum İçerikleri */
+    .topic-item { display: flex; border-bottom: 1px solid var(--border); padding: 15px; transition: 0.2s; align-items: center; gap: 15px; }
+    .topic-item:hover { background: #161b22; }
+    .topic-icon { width: 40px; height: 40px; background: #21262d; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.2em; color: var(--primary); }
+    .topic-info { flex: 1; }
+    .topic-title { font-size: 1.1em; font-weight: bold; color: #fff; text-decoration: none; display: block; margin-bottom: 5px; }
+    .topic-title:hover { color: var(--primary); }
+    .topic-meta { font-size: 0.8em; color: var(--text-muted); display: flex; gap: 15px; }
+    
+    .rank-badge { font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #21262d; color: var(--primary); border: 1px solid #30363d; font-weight: bold; }
+    
+    /* Markdown İçeriği */
+    .markdown-body pre { background: #010409; padding: 15px; border-radius: 6px; overflow-x: auto; border: 1px solid var(--border); color: var(--primary); }
+    .markdown-body code { font-family: 'Courier New', monospace; }
+    
+    @media (max-width: 768px) {
+      .container { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .nav-links { display: none; } /* Mobilde menüyü gizle (basitlik için) */
+    }
   </style>
 </head>
 <body>
-  <header>
-    <a href="/" class="logo">🛡️ Siber<span>Kale</span></a>
-    <% if (user) { %>
-      <a href="/">Akış</a>
-      <a href="/rooms">Odalar</a>
-      <a href="/posts/new">Paylaş</a>
-      <% if (user.role === 'admin') { %><a href="/admin" style="color: var(--danger);">Admin</a><% } %>
-      
-      <div class="user-info">
-        <span class="muted"><%= user.email %></span>
-        <form method="post" action="/logout" style="display:inline">
-          <button type="submit" class="danger">Çıkış</button>
-        </form>
-      </div>
-    <% } else { %>
-      <div style="margin-left: auto; display: flex; gap: 10px;">
-        <a href="/login">Giriş</a>
-        <a href="/register" style="color: var(--success);">Kayıt Ol</a>
-      </div>
-    <% } %>
-  </header>
+  <!-- ÜST BAR -->
+  <nav class="navbar">
+    <a href="/" class="logo">Null<span>Sec</span></a>
+    <div class="nav-links">
+      <a href="/">Forum</a>
+      <a href="/rooms">Özel Odalar</a>
+      <a href="/posts/new">Konu Aç</a>
+      <% if (user && user.role === 'admin') { %><a href="/admin" style="color: var(--danger);">Admin</a><% } %>
+    </div>
+    
+    <div>
+      <% if (user) { %>
+        <div class="user-badge">
+          <div style="width:30px; height:30px; background:#333; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; color:#fff;">
+            <%= user.username ? user.username[0].toUpperCase() : 'U' %>
+          </div>
+          <div style="font-size:0.85em;">
+            <div style="color:#fff; font-weight:bold;"><%= user.username || user.email %></div>
+            <div class="rank-badge"><%= getRank(user.points || 0) %></div>
+          </div>
+          <form method="post" action="/logout" style="margin:0; margin-left:10px;">
+            <button type="submit" class="btn-danger" style="padding:5px 10px; font-size:0.7em;">Çıkış</button>
+          </form>
+        </div>
+      <% } else { %>
+        <a href="/login" class="btn btn-outline">Giriş</a>
+        <a href="/register" class="btn">Kayıt Ol</a>
+      <% } %>
+    </div>
+  </nav>
 
-  <main>
-    <%- body %>
-  </main>
+  <!-- İÇERİK -->
+  <div class="container">
+    <main class="main-content">
+      <%- body %>
+    </main>
+    
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="panel-header">📊 İstatistikler</div>
+        <div class="panel-body">
+          <p style="margin:0; font-size:0.9em;">Hoş geldin, <b><%= user ? (user.username || 'Misafir') : 'Ziyaretçi' %></b>.</p>
+          <p style="font-size:0.85em; color:var(--text-muted); margin-top:10px;">Siber güvenlik dünyasından en güncel konuları burada bulabilirsin.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
 
-  <footer>
-    SiberKale - Yasal Siber Güvenlik Topluluğu<br>
-    <span class="muted">Etik hacking, savunma ve eğitim.</span>
+  <footer style="text-align: center; padding: 30px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85em; margin-top: 40px;">
+    NullSec &copy; 2024 - Yasalara saygılı siber güvenlik topluluğu.
   </footer>
 </body>
 </html>
