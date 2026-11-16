@@ -1,50 +1,64 @@
-<h1 style="color: white;">Siber Güvenlik Akışı</h1>
+<div class="panel">
+  <div class="panel-header">
+    <span>📌 Son Eklenen Konular</span>
+    <a href="/posts/new" class="btn" style="padding: 5px 15px; font-size: 0.8em;">+ Yeni Konu</a>
+  </div>
+  <div class="panel-body" style="padding: 0;">
+    
+    <% if (posts.length === 0) { %>
+      <div style="padding: 20px; text-align: center; color: var(--text-muted);">Henüz konu açılmamış.</div>
+    <% } %>
 
-<% if (posts.length === 0) { %>
-  <article style="text-align: center;">
-    <h2>Henüz paylaşım yok.</h2>
-    <p class="muted">İlk zafiyet notunu veya CTF çözümünü sen paylaş!</p>
-  </article>
-<% } %>
-
-<% posts.forEach((post) => { %>
-  <article>
-    <h2 style="margin-top: 0; color: var(--primary);"><%= post.title %></h2>
-    <p class="prewrap"><%= post.body %></p>
-    <p class="muted">👤 <%= post.email %> — 🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></p>
-
-    <div style="display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid var(--border); padding-top: 15px;">
-      
-      <!-- BEĞENİ BUTONU -->
-      <% if (user) { %>
-        <form method="post" action="/posts/<%= post.id %>/like" style="margin: 0;">
-          <button type="submit" class="secondary" style="padding: 6px 12px; font-size: 0.9em; color: <%= post.has_liked ? 'var(--success)' : 'var(--text)' %>; border: 1px solid <%= post.has_liked ? 'var(--success)' : 'var(--border)' %>;">
-            <%= post.has_liked ? '👍 Beğendin' : '👍 Beğen' %> (<%= post.like_count %>)
-          </button>
-        </form>
-      <% } else { %>
-         <span class="muted">👍 <%= post.like_count %> Beğeni</span>
-      <% } %>
-
-      <span class="muted" style="padding: 6px 0;">💬 <%= post.comment_count %> Yorum</span>
-    </div>
-
-    <!-- YORUMLAR -->
-    <div style="margin-top: 15px; padding-left: 10px; border-left: 2px solid var(--border);">
-      <% post.comments.forEach(c => { %>
-        <div style="margin-bottom: 10px; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 6px;">
-          <p style="margin: 0; font-size: 0.95em;"><%= c.body %></p>
-          <span class="muted" style="font-size: 0.75em;">👤 <%= c.email %> - <%= new Date(c.created_at).toLocaleString('tr-TR') %></span>
+    <% posts.forEach((post) => { %>
+      <div style="border-bottom: 1px solid var(--border);">
+        <div class="topic-item">
+          <div class="topic-icon">💬</div>
+          <div class="topic-info">
+            <a href="#" class="topic-title"><%= post.title %></a>
+            <div class="topic-meta">
+              <span style="color: var(--primary);"># <%= post.category %></span>
+              <span>👤 <%= post.username %></span>
+              <span>👍 <%= post.like_count %> Beğeni</span>
+              <span>🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></span>
+            </div>
+          </div>
         </div>
-      <% }) %>
+        
+        <!-- Konu İçeriği ve Yorumlar -->
+        <div style="padding: 0 20px 20px 75px;">
+          <div class="markdown-body" style="margin-bottom: 15px; color: #a0a0a0;">
+            <%- parseMarkdown(post.body) %>
+          </div>
+          
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <% if (user) { %>
+              <form method="post" action="/posts/<%= post.id %>/like" style="margin: 0;">
+                <button type="submit" class="<%= post.has_liked ? '' : 'btn-outline' %>" style="padding: 5px 10px; font-size: 0.8em;">
+                  👍 <%= post.has_liked ? 'Beğendin' : 'Beğen' %>
+                </button>
+              </form>
+            <% } %>
+            <span style="font-size: 0.85em; color: var(--text-muted);"><%= post.comment_count %> Yorum</span>
+          </div>
 
-      <!-- YORUM YAPMA FORMU -->
-      <% if (user) { %>
-        <form method="post" action="/posts/<%= post.id %>/comment" style="display: flex; gap: 10px; margin-top: 10px;">
-          <input name="body" placeholder="Bir yorum yaz..." required maxlength="500" style="padding: 8px; font-size: 0.9em;">
-          <button type="submit" style="width: auto; padding: 8px 15px; font-size: 0.9em;">Gönder</button>
-        </form>
-      <% } %>
-    </div>
-  </article>
-<% }) %>
+          <!-- Yorum Alanı -->
+          <div style="margin-top: 15px; padding-left: 15px; border-left: 2px solid var(--border);">
+            <% post.comments.forEach(c => { %>
+              <div style="margin-bottom: 10px; background: #0d1117; padding: 10px; border-radius: 4px;">
+                <span style="color: var(--primary); font-weight: bold; font-size: 0.85em;"><%= c.username %>:</span>
+                <span style="font-size: 0.9em;"><%= c.body %></span>
+              </div>
+            <% }) %>
+            
+            <% if (user) { %>
+              <form method="post" action="/posts/<%= post.id %>/comment" style="display: flex; gap: 10px; margin-top: 10px;">
+                <input name="body" placeholder="Yorumunu yaz..." required style="margin: 0; padding: 8px; font-size: 0.9em;">
+                <button type="submit" style="padding: 8px 15px; font-size: 0.8em;">Gönder</button>
+              </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
