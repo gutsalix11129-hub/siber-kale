@@ -1,0 +1,31 @@
+<h1>Siber Güvenlik Akışı</h1>
+<p class="muted">Topluluk tarafından paylaşılan onaylı içerikler.</p>
+
+<% if (posts.length === 0) { %>
+  <article>
+    <p>Henüz onaylı bir paylaşım yok. İlk paylaşımı sen yapmak ister misin?</p>
+    <% if (user) { %>
+      <a href="/posts/new"><button>Yeni Paylaşım Yap</button></a>
+    <% } else { %>
+      <a href="/login"><button>Giriş Yap ve Paylaş</button></a>
+    <% } %>
+  </article>
+<% } %>
+
+<% posts.forEach((post) => { %>
+  <article>
+    <h2><%= post.title %></h2>
+    <p class="prewrap"><%= post.body %></p>
+    <p class="muted">👤 <%= post.email %> — 🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></p>
+
+    <% if (user) { %>
+      <details style="margin-top: 10px;">
+        <summary style="cursor: pointer; color: #dc3545; font-size: 0.9em;">Şikayet Et</summary>
+        <form method="post" action="/posts/<%= post.id %>/report" style="margin-top: 10px;">
+          <input name="reason" placeholder="Şikayet nedeni (örn: kural dışı içerik)" required maxlength="500" style="width: 100%;">
+          <button type="submit" style="background-color: #dc3545; margin-top: 5px;">Gönder</button>
+        </form>
+      </details>
+    <% } %>
+  </article>
+<% }) %>
