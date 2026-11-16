@@ -1,0 +1,53 @@
+<div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 20px;">
+  <h1><%= room.name %></h1>
+  <p class="muted">
+    <%= room.visibility === 'public' ? '🌍 Herkese Açık Oda' : '🔒 Gizli Oda (Sadece Davetliler)' %>
+  </p>
+  
+  <% if (room.description) { %>
+    <p><%= room.description %></p>
+  <% } %>
+
+  <% if (inviteCode) { %>
+    <div style="background: #e8f4fd; padding: 10px; border-radius: 4px; border: 1px solid #b6d4fe; margin-top: 15px;">
+      <strong>🔗 Yeni Davet Linki Oluşturuldu:</strong><br>
+      <span class="muted" style="font-size: 0.9em;">Bu linki arkadaşlarınla paylaşabilirsin:</span><br>
+      <a href="/join/<%= inviteCode %>" style="word-break: break-all;">/join/<%= inviteCode %></a>
+    </div>
+  <% } %>
+
+  <% if (isMember && room.visibility === 'private') { %>
+    <form method="post" action="/rooms/<%= room.id %>/invite" style="margin-top: 15px;">
+      <button type="submit" style="background-color: #17a2b8;">+ Yeni Davet Linki Üret</button>
+    </form>
+  <% } %>
+
+  <% if (!isMember && room.visibility === 'public') { %>
+    <form method="post" action="/rooms/<%= room.id %>/join" style="margin-top: 15px;">
+      <button type="submit" style="background-color: #28a745;">Bu Odaya Katıl</button>
+    </form>
+  <% } %>
+</div>
+
+<h2>💬 Oda Mesajları</h2>
+<div style="margin-bottom: 20px;">
+  <% if (messages.length === 0) { %>
+    <p class="muted">Henüz mesaj yok. İlk mesajı sen yaz!</p>
+  <% } %>
+
+  <% messages.forEach(m => { %>
+    <article style="margin-bottom: 10px; padding: 10px;">
+      <p class="prewrap" style="margin: 0;"><%= m.body %></p>
+      <p class="muted" style="margin: 5px 0 0 0; font-size: 0.8em;">👤 <%= m.email %> — 🕒 <%= new Date(m.created_at).toLocaleString('tr-TR') %></p>
+    </article>
+  <% }) %>
+</div>
+
+<% if (isMember) { %>
+  <form method="post" action="/rooms/<%= room.id %>/messages" style="background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; position: sticky; bottom: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1);">
+    <textarea name="body" required maxlength="2000" placeholder="Mesajınızı buraya yazın..." style="min-height: 80px; margin-bottom: 10px;"></textarea>
+    <button type="submit" style="width: 100%;">Mesajı Gönder</button>
+  </form>
+<% } else if (room.visibility === 'private') { %>
+  <p class="muted" style="text-align: center; padding: 20px; background: #fff3cd; border-radius: 8px;">Bu odaya mesaj yazmak için davet linkine ihtiyacınız var.</p>
+<% } %>
