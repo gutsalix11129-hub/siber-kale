@@ -1,0 +1,16 @@
+<h1>Giriş Yap</h1>
+<p class="muted">Hesabınıza giriş yaparak topluluğa katılın.</p>
+
+<form method="post" action="/login" style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; border: 1px solid #ddd;">
+  <p>
+    <label>E-posta Adresi:</label><br>
+    <input type="email" name="email" placeholder="ornek@mail.com" required style="width: 100%; box-sizing: border-box;">
+  </p>
+  <p>
+    <label>Şifre:</label><br>
+    <input type="password" name="password" placeholder="**********" required style="width: 100%; box-sizing: border-box;">
+  </p>
+  <button type="submit" style="width: 100%;">Giriş Yap</button>
+</form>
+
+<p style="margin-top: 15px;">Hesabınız yok mu? <a href="/register" style="color: #0056b3; font-weight: bold;">Hemen Kayıt Olun</a></p>
