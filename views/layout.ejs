@@ -5,35 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= title %> | SiberKale</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 0 auto; padding: 16px; line-height: 1.5; background-color: #f9f9f9; color: #333; }
-    header { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-bottom: 2px solid #0056b3; padding-bottom: 12px; margin-bottom: 24px; }
-    header a { margin-right: 8px; color: #0056b3; text-decoration: none; font-weight: bold; }
+    :root { --bg: #0d1117; --panel: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --primary: #58a6ff; --danger: #f85149; --success: #238636; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); max-width: 900px; margin: 0 auto; padding: 16px; line-height: 1.6; }
+    header { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 24px; }
+    header a { color: var(--primary); text-decoration: none; font-weight: 600; font-size: 0.95em; }
     header a:hover { text-decoration: underline; }
-    article { background: white; border: 1px solid #ddd; padding: 16px; margin-bottom: 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    input, textarea, button { font: inherit; padding: 8px; margin: 4px 0; border: 1px solid #ccc; border-radius: 4px; }
-    button { background-color: #0056b3; color: white; cursor: pointer; border: none; padding: 10px 15px; }
-    button:hover { background-color: #004494; }
-    textarea { width: 100%; min-height: 120px; box-sizing: border-box; }
-    .muted { color: #666; font-size: 0.9em; }
-    .prewrap { white-space: pre-wrap; }
-    footer { margin-top: 40px; border-top: 1px solid #ddd; padding-top: 16px; font-size: 0.85em; color: #555; text-align: center; }
+    .logo { font-size: 1.3em; font-weight: bold; color: #fff; letter-spacing: 1px; }
+    .logo span { color: var(--success); }
+    article { background-color: var(--panel); border: 1px solid var(--border); padding: 20px; margin-bottom: 16px; border-radius: 8px; }
+    input, textarea, button { font: inherit; padding: 10px; margin: 4px 0; border: 1px solid var(--border); border-radius: 6px; background-color: var(--bg); color: var(--text); width: 100%; box-sizing: border-box; }
+    input:focus, textarea:focus { border-color: var(--primary); outline: none; }
+    button { background-color: var(--success); color: white; cursor: pointer; font-weight: bold; border: none; transition: 0.2s; }
+    button:hover { background-color: #2ea043; }
+    button.danger { background-color: var(--danger); }
+    button.danger:hover { background-color: #da3633; }
+    button.secondary { background-color: var(--border); }
+    button.secondary:hover { background-color: #4b535d; }
+    .muted { color: var(--text-muted); font-size: 0.85em; }
+    .prewrap { white-space: pre-wrap; font-family: "Courier New", Courier, monospace; background: #000; padding: 15px; border-radius: 6px; border: 1px solid var(--border); overflow-x: auto; }
+    footer { margin-top: 40px; border-top: 1px solid var(--border); padding-top: 16px; font-size: 0.85em; color: var(--text-muted); text-align: center; }
+    .user-info { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .user-info button { width: auto; padding: 5px 10px; font-size: 0.8em; }
   </style>
 </head>
 <body>
   <header>
-    <strong><a href="/" style="font-size: 1.2em; color: #003366;">🛡️ SiberKale</a></strong>
+    <a href="/" class="logo">🛡️ Siber<span>Kale</span></a>
     <% if (user) { %>
       <a href="/">Akış</a>
       <a href="/rooms">Odalar</a>
-      <a href="/posts/new">Yeni Paylaşım</a>
-      <% if (user.role === 'admin') { %><a href="/admin" style="color: red;">Admin Paneli</a><% } %>
-      <span class="muted" style="margin-left: auto;"><%= user.email %></span>
-      <form method="post" action="/logout" style="display:inline">
-        <button type="submit" style="background-color: #dc3545;">Çıkış</button>
-      </form>
+      <a href="/posts/new">Paylaş</a>
+      <% if (user.role === 'admin') { %><a href="/admin" style="color: var(--danger);">Admin</a><% } %>
+      
+      <div class="user-info">
+        <span class="muted"><%= user.email %></span>
+        <form method="post" action="/logout" style="display:inline">
+          <button type="submit" class="danger">Çıkış</button>
+        </form>
+      </div>
     <% } else { %>
-      <a href="/login" style="margin-left: auto;">Giriş Yap</a>
-      <a href="/register">Kayıt Ol</a>
+      <div style="margin-left: auto; display: flex; gap: 10px;">
+        <a href="/login">Giriş</a>
+        <a href="/register" style="color: var(--success);">Kayıt Ol</a>
+      </div>
     <% } %>
   </header>
 
@@ -43,7 +57,7 @@
 
   <footer>
     SiberKale - Yasal Siber Güvenlik Topluluğu<br>
-    Bu platform yalnızca etik hacking, savunma ve eğitim içerikleri içindir. Yasadışı faaliyetler yasaktır.
+    <span class="muted">Etik hacking, savunma ve eğitim.</span>
   </footer>
 </body>
 </html>
