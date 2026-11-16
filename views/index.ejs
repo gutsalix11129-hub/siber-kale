@@ -1,32 +1,81 @@
-<div class="flex justify-between items-center mb-4">
-  <h1 class="text-xl font-bold text-white"><i class="fas fa-home text-primary mr-2"></i>Forum Ana Sayfa</h1>
-  <a href="/new-thread" class="bg-primary text-black px-4 py-2 rounded text-sm font-bold hover:bg-white transition"><i class="fas fa-plus mr-1"></i>Konu Aç</a>
+<!-- HOŞGELDİN MESAJI -->
+<div class="bg-panel border border-border rounded-md p-4 mb-4 flex justify-between items-center shadow-md">
+  <div>
+    <h1 class="text-lg font-bold text-white"><i class="fas fa-shield-alt text-primary mr-2"></i>NullSec Siber Güvenlik Forumu</h1>
+    <p class="text-sm text-gray-500 mt-1">Yasal hacking, zafiyet analizleri ve CTF çözümleri için merkez.</p>
+  </div>
+  <% if(user) { %>
+    <a href="/new-thread" class="bg-primary text-black font-bold px-4 py-2 rounded text-sm hover:bg-white transition shadow-[0_0_10px_rgba(0,255,65,0.3)]"><i class="fas fa-plus mr-1"></i>Konu Aç</a>
+  <% } %>
 </div>
 
-<div class="space-y-4">
-  <% forums.forEach(forum => { %>
-    <div class="bg-panel rounded-lg border border-border overflow-hidden hover:border-primary transition flex flex-col md:flex-row items-center p-4 gap-4">
-      <div class="w-12 h-12 bg-darkbg rounded-lg border border-border flex items-center justify-center flex-shrink-0"><i class="fas <%= forum.icon %> text-primary text-xl"></i></div>
-      <div class="flex-1 text-center md:text-left">
-        <a href="/forum/<%= forum.id %>" class="text-lg font-bold text-white hover:text-primary transition"><%= forum.name %></a>
-        <p class="text-sm text-gray-400"><%= forum.description %></p>
-      </div>
-      <div class="flex gap-4 text-center">
-        <div><div class="text-white font-bold"><%= forum.threadCount %></div><div class="text-xs text-gray-500">Konu</div></div>
-        <div><div class="text-white font-bold"><%= forum.replyCount %></div><div class="text-xs text-gray-500">Mesaj</div></div>
-      </div>
-    </div>
-  <% }) %>
-</div>
-
-<div class="mt-8 bg-panel rounded-lg border border-border overflow-hidden">
-  <div class="bg-[#21262d] px-4 py-3 border-b border-border font-bold text-white text-sm"><i class="fas fa-clock text-primary mr-2"></i>Son Açılan Konular</div>
+<!-- SON KONULAR (WIDGET) -->
+<div class="bg-panel border border-border rounded-md overflow-hidden mb-6">
+  <div class="bg-panelLight px-4 py-2 border-b border-border text-xs font-bold text-gray-300 flex justify-between uppercase tracking-wider">
+    <span>Son Açılan Konular</span>
+    <span>Yazar</span>
+  </div>
   <div class="divide-y divide-border">
     <% latestThreads.forEach(t => { %>
-      <div class="p-3 hover:bg-[#1c2128] flex justify-between items-center">
-        <a href="/thread/<%= t.id %>" class="text-sm text-gray-300 hover:text-primary truncate"><%= t.title %></a>
-        <span class="text-xs text-gray-500 whitespace-nowrap ml-4"><%= t.username %></span>
+      <div class="flex justify-between items-center p-2.5 hover:bg-[#1a1a1a] transition">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-comment text-primary text-xs"></i>
+          <a href="/thread/<%= t.id %>" class="text-sm text-gray-300 hover:text-primary transition font-medium"><%= t.title %></a>
+        </div>
+        <a href="/profile/<%= t.username %>" class="text-xs text-gray-500 hover:text-white"><%= t.username %></a>
       </div>
     <% }) %>
   </div>
+</div>
+
+<!-- FORUM KATEGORİLERİ (XENFORO TARZI) -->
+<h2 class="text-base font-bold text-white mb-3"><i class="fas fa-bars text-primary mr-2"></i>Forum Kategorileri</h2>
+<div class="space-y-4">
+  <% forums.forEach(forum => { %>
+    <div class="bg-panel border border-border rounded-md overflow-hidden shadow-sm">
+      
+      <!-- Kategori Başlığı -->
+      <div class="bg-panelLight px-4 py-2 border-b border-border font-bold text-white text-sm flex items-center gap-2">
+        <i class="fas <%= forum.icon %> text-primary"></i> <%= forum.name %>
+      </div>
+
+      <!-- Kategori İçeriği (Konu Listesi Görünümlü) -->
+      <div class="flex flex-col md:flex-row items-center p-3 hover:bg-[#1a1a1a] transition cursor-pointer group">
+        
+        <!-- İkon ve Açıklama -->
+        <div class="flex-1 flex items-center gap-4 w-full md:w-auto mb-3 md:mb-0">
+          <div class="w-12 h-12 bg-[#0a0a0a] rounded-full border border-border flex items-center justify-center flex-shrink-0 group-hover:border-primary transition">
+            <i class="fas <%= forum.icon %> text-gray-500 text-xl group-hover:text-primary transition"></i>
+          </div>
+          <div>
+            <a href="/forum/<%= forum.id %>" class="text-base font-bold text-gray-200 hover:text-primary transition"><%= forum.name %></a>
+            <p class="text-xs text-gray-500 mt-0.5"><%= forum.description %></p>
+          </div>
+        </div>
+
+        <!-- İstatistikler -->
+        <div class="flex items-center gap-6 md:gap-8 w-full md:w-auto justify-between md:justify-end border-t md:border-t-0 md:border-l border-border pt-3 md:pt-0 md:pl-6">
+          <div class="text-center">
+            <div class="text-sm font-bold text-white"><%= forum.threadCount %></div>
+            <div class="text-[10px] text-gray-500 uppercase tracking-wider">Konu</div>
+          </div>
+          <div class="text-center">
+            <div class="text-sm font-bold text-white"><%= forum.replyCount %></div>
+            <div class="text-[10px] text-gray-500 uppercase tracking-wider">Mesaj</div>
+          </div>
+          
+          <!-- Son Mesaj Bilgisi -->
+          <div class="text-right w-40 hidden md:block">
+            <% if (forum.lastPost) { %>
+              <a href="/thread/<%= forum.lastPost.id %>" class="text-xs text-primary truncate block hover:underline"><%= forum.lastPost.title %></a>
+              <span class="text-[10px] text-gray-500"><%= forum.lastPost.username %>, <%= new Date(forum.lastPost.created_at).toLocaleDateString('tr-TR') %></span>
+            <% } else { %>
+              <span class="text-xs text-gray-600">Henüz mesaj yok</span>
+            <% } %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  <% }) %>
 </div>
