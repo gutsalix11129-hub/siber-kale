@@ -1,16 +1,33 @@
-<h1>Kayıt Ol</h1>
-<p class="muted">SiberKale topluluğuna katılın. Sadece yasal ve etik içerikler paylaşılır.</p>
+<div class="min-h-[70vh] flex items-center justify-center py-8">
+  <div class="bg-panel p-8 rounded-xl border border-border w-full max-w-md shadow-[0_0_30px_rgba(0,255,65,0.05)]">
+    <div class="text-center mb-8">
+      <i class="fas fa-user-plus text-4xl text-primary mb-3"></i>
+      <h2 class="text-2xl font-bold text-white">Aramıza Katıl</h2>
+      <p class="text-gray-400 text-sm mt-1">Yasal hacker topluluğuna adım at</p>
+    </div>
 
-<form method="post" action="/register" style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; border: 1px solid #ddd;">
-  <p>
-    <label>E-posta Adresi:</label><br>
-    <input type="email" name="email" placeholder="ornek@mail.com" required maxlength="254" style="width: 100%; box-sizing: border-box;">
-  </p>
-  <p>
-    <label>Şifre (En az 10 karakter):</label><br>
-    <input type="password" name="password" placeholder="**********" required minlength="10" style="width: 100%; box-sizing: border-box;">
-  </p>
-  <button type="submit" style="width: 100%;">Kayıt Ol</button>
-</form>
+    <% if (error) { %>
+      <div class="bg-red-500/10 border border-red-500/50 text-red-500 px-4 py-3 rounded mb-4 text-sm flex items-center">
+        <i class="fas fa-exclamation-triangle mr-2"></i> <%= error %>
+      </div>
+    <% } %>
 
-<p style="margin-top: 15px;">Zaten hesabınız var mı? <a href="/login" style="color: #0056b3; font-weight: bold;">Giriş Yapın</a></p>
+    <form method="post" action="/register" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Kullanıcı Adı</label>
+        <input type="text" name="username" required class="w-full bg-darkbg border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="HackerIsmi">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">E-posta</label>
+        <input type="email" name="email" required class="w-full bg-darkbg border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="ornek@mail.com">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-300 mb-1">Şifre</label>
+        <input type="password" name="password" required class="w-full bg-darkbg border border-border rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="En az 8 karakter">
+      </div>
+      <button type="submit" class="w-full bg-primary text-black font-bold py-2.5 rounded-lg hover:bg-white transition duration-200 mt-2">Kayıt Ol</button>
+    </form>
+    
+    <p class="text-center text-gray-500 text-sm mt-6">Zaten üye misin? <a href="/login" class="text-primary hover:underline">Giriş Yap</a></p>
+  </div>
+</div>
