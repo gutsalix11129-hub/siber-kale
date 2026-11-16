@@ -1,0 +1,41 @@
+<h1>Admin Paneli</h1>
+<p class="muted">Bekleyen paylaşımları onaylayabilir veya reddedebilirsiniz.</p>
+
+<hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+<h2>Bekleyen Paylaşımlar</h2>
+<% if (pending.length === 0) { %>
+  <p>Harika! Bekleyen paylaşım yok.</p>
+<% } %>
+
+<% pending.forEach((post) => { %>
+  <article>
+    <h3><%= post.title %></h3>
+    <p class="prewrap"><%= post.body %></p>
+    <p class="muted">👤 <%= post.email %> — 🕒 <%= new Date(post.created_at).toLocaleString('tr-TR') %></p>
+    
+    <div style="margin-top: 10px; display: flex; gap: 10px;">
+      <form method="post" action="/admin/posts/<%= post.id %>/approve">
+        <button type="submit" style="background-color: #28a745;">✅ Onayla</button>
+      </form>
+      <form method="post" action="/admin/posts/<%= post.id %>/reject">
+        <button type="submit" style="background-color: #dc3545;">❌ Reddet</button>
+      </form>
+    </div>
+  </article>
+<% }) %>
+
+<hr style="border: 1px solid #ddd; margin: 20px 0;">
+
+<h2>Gelen Şikayetler</h2>
+<% if (reports.length === 0) { %>
+  <p>Henüz bir şikayet yok.</p>
+<% } %>
+
+<% reports.forEach((r) => { %>
+  <article style="border-left: 4px solid #dc3545;">
+    <strong>Şikayet Edilen Paylaşım: <%= r.title %></strong>
+    <p><b>Şikayet Nedeni:</b> <%= r.reason %></p>
+    <p class="muted">🕒 <%= new Date(r.created_at).toLocaleString('tr-TR') %></p>
+  </article>
+<% }) %>
