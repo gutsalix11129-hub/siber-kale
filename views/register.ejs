@@ -1,0 +1,16 @@
+<h1>Kayıt Ol</h1>
+<p class="muted">SiberKale topluluğuna katılın. Sadece yasal ve etik içerikler paylaşılır.</p>
+
+<form method="post" action="/register" style="background: white; padding: 20px; border-radius: 8px; max-width: 400px; border: 1px solid #ddd;">
+  <p>
+    <label>E-posta Adresi:</label><br>
+    <input type="email" name="email" placeholder="ornek@mail.com" required maxlength="254" style="width: 100%; box-sizing: border-box;">
+  </p>
+  <p>
+    <label>Şifre (En az 10 karakter):</label><br>
+    <input type="password" name="password" placeholder="**********" required minlength="10" style="width: 100%; box-sizing: border-box;">
+  </p>
+  <button type="submit" style="width: 100%;">Kayıt Ol</button>
+</form>
+
+<p style="margin-top: 15px;">Zaten hesabınız var mı? <a href="/login" style="color: #0056b3; font-weight: bold;">Giriş Yapın</a></p>
