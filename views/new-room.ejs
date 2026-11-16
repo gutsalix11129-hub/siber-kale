@@ -1,0 +1,32 @@
+<h1>Yeni Oda Kur</h1>
+<p class="muted">Kendi topluluğunuzu oluşturun. Özel odalar sadece davet linkiyle katılım kabul eder.</p>
+
+<form method="post" action="/rooms" style="background: white; padding: 20px; border-radius: 8px; max-width: 500px; border: 1px solid #ddd;">
+  <p>
+    <label>Oda Adı:</label><br>
+    <input name="name" placeholder="Örn: Web Güvenliği Çalışma Grubu" required minlength="3" maxlength="80" style="width: 100%; box-sizing: border-box;">
+  </p>
+  
+  <p>
+    <label>Kısa Ad (Slug):</label><br>
+    <span class="muted" style="font-size: 0.8em;">Sadece küçük harf, rakam ve tire (-) kullanın.</span><br>
+    <input name="slug" placeholder="Örn: web-guvenligi" required minlength="3" maxlength="40" pattern="^[a-z0-9-]+$" title="Sadece küçük harf, rakam ve tire kullanılabilir." style="width: 100%; box-sizing: border-box;">
+  </p>
+  
+  <p>
+    <label>Oda Açıklaması (İsteğe bağlı):</label><br>
+    <textarea name="description" placeholder="Odanın amacı nedir?" maxlength="500" style="min-height: 80px;"></textarea>
+  </p>
+  
+  <p>
+    <label>Gizlilik Durumu:</label><br>
+    <label style="display: block; margin-top: 5px; cursor: pointer;">
+      <input type="radio" name="visibility" value="public" checked> 🌍 <b>Herkese Açık:</b> Herkes görebilir ve katılabilir.
+    </label>
+    <label style="display: block; margin-top: 5px; cursor: pointer;">
+      <input type="radio" name="visibility" value="private"> 🔒 <b>Sadece Davetli:</b> Sadece davet koduna sahip olanlar katılabilir.
+    </label>
+  </p>
+  
+  <button type="submit" style="width: 100%; margin-top: 10px;">Odayı Oluştur</button>
+</form>
