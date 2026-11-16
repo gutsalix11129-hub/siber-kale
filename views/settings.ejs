@@ -1,0 +1,12 @@
+<h1 class="text-2xl font-bold text-white mb-6"><i class="fas fa-cog text-primary mr-2"></i>Hesap Ayarları</h1>
+<form method="POST" action="/settings" class="bg-panel rounded-lg border border-border p-6 space-y-4 max-w-xl">
+  <div>
+    <label class="block text-sm text-gray-300 mb-1">Hakkımda (Bio)</label>
+    <textarea name="bio" class="w-full bg-darkbg border border-border rounded p-2 text-white" rows="3"><%= profile.bio || '' %></textarea>
+  </div>
+  <div>
+    <label class="block text-sm text-gray-300 mb-1">İmza (Her mesajın altında görünür)</label>
+    <input name="signature" value="<%= profile.signature || '' %>" class="w-full bg-darkbg border border-border rounded p-2 text-white">
+  </div>
+  <button type="submit" class="bg-primary text-black font-bold px-4 py-2 rounded">Kaydet</button>
+</form>
