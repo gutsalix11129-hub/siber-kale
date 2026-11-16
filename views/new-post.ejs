@@ -1,0 +1,14 @@
+<h1>Yeni Paylaşım Yap</h1>
+<p class="muted">Paylaşımınız admin onayından sonra akışta görünür. Lütfen yasal ve etik sınırlar içinde kalın.</p>
+
+<form method="post" action="/posts/new" style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+  <p>
+    <label>Başlık:</label><br>
+    <input name="title" placeholder="Örn: TryHackMe Room Çözümü" required minlength="5" maxlength="120" style="width: 100%; box-sizing: border-box;">
+  </p>
+  <p>
+    <label>İçerik:</label><br>
+    <textarea name="body" placeholder="Yazınızı buraya detaylıca yazın..." required minlength="20" maxlength="10000"></textarea>
+  </p>
+  <button type="submit" style="width: 100%;">Moderasyona Gönder</button>
+</form>
