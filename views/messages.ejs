@@ -1,0 +1,13 @@
+<h1 class="text-2xl font-bold text-white mb-6"><i class="fas fa-envelope text-primary mr-2"></i>Gelen Kutusu</h1>
+<div class="bg-panel rounded-lg border border-border divide-y divide-border">
+  <% if (messages.length === 0) { %><div class="p-4 text-gray-500">Mesaj yok.</div><% } %>
+  <% messages.forEach(m => { %>
+    <div class="p-4 hover:bg-[#1c2128]">
+      <div class="flex justify-between mb-1">
+        <span class="text-primary font-bold"><%= m.sender_name %></span>
+        <span class="text-xs text-gray-500"><%= new Date(m.created_at).toLocaleString('tr-TR') %></span>
+      </div>
+      <p class="text-sm text-gray-300"><%= m.body %></p>
+    </div>
+  <% }) %>
+</div>
