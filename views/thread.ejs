@@ -1,51 +1,39 @@
-<div class="mb-4">
-  <a href="/forum/<%= thread.forum_id %>" class="text-sm text-gray-400 hover:text-primary"><i class="fas fa-arrow-left mr-1"></i><%= thread.forum_name %>'e dön</a>
-</div>
+<div class="mb-4 font-mono"><a href="/forum/<%= thread.forum_id %>" class="text-sm text-gray-400 hover:text-primary"><i class="fas fa-arrow-left mr-1"></i>GERİ DÖN</a></div>
 
-<div class="bg-panel rounded-lg border border-border overflow-hidden mb-6 <%= thread.is_pinned ? 'border-l-4 border-l-primary' : '' %>">
+<div class="bg-panel border border-border overflow-hidden mb-6 <%= thread.is_pinned ? 'border-l-4 border-l-primary' : '' %> neon-border">
   <div class="p-6">
-    <div class="flex justify-between items-start mb-4">
-      <div>
-        <h1 class="text-xl font-bold text-white">
-          <% if (thread.is_pinned) { %><span class="text-xs bg-primary text-black px-2 py-0.5 rounded mr-2"><i class="fas fa-thumbtack"></i> Sabit</span><% } %>
-          <% if (thread.is_locked) { %><span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded mr-2"><i class="fas fa-lock"></i> Kilitli</span><% } %>
-          <% if (thread.prefix) { %><span class="text-xs bg-[#21262d] text-primary border border-border px-2 py-1 rounded mr-2"><%= thread.prefix %></span><% } %>
-          <%= thread.title %>
-        </h1>
-        <div class="text-sm text-gray-400 mt-2">
-          <a href="/profile/<%= thread.username %>" class="text-primary font-bold"><%= thread.username %></a> 
-          - <%= new Date(thread.created_at).toLocaleString('tr-TR') %> - <i class="fas fa-eye ml-1"></i> <%= thread.views %>
-        </div>
-      </div>
-      <form method="post" action="/thread/<%= thread.id %>/like">
-        <button type="submit" class="<%= hasLiked ? 'text-primary' : 'text-gray-500 hover:text-primary' %> flex items-center gap-2">
-          <i class="fas fa-heart text-xl"></i> <span class="text-sm"><%= likeCount %></span>
-        </button>
-      </form>
+    <h1 class="text-xl font-bold text-white mb-2 font-mono">
+      <% if (thread.prefix) { %><span class="text-[10px] bg-black text-accent border border-border px-2 py-1 rounded-none mr-2 align-middle"><%= thread.prefix %></span><% } %>
+      <%= thread.title %>
+    </h1>
+    <div class="text-xs text-gray-500 mb-6 border-b border-border pb-4 font-mono">
+      YAZAR: <a href="/profile/<%= thread.username %>" class="text-primary font-bold hover:underline"><%= thread.username %></a> | TARİH: <%= new Date(thread.created_at).toLocaleString('tr-TR') %> | OKUNMA: <%= thread.views %>
     </div>
     <div class="markdown-body text-gray-300"><%- parseMarkdown(thread.body) %></div>
   </div>
 </div>
 
-<h3 class="text-lg font-bold text-white mb-3"><i class="fas fa-comments text-primary mr-2"></i>Yanıtlar (<%= replies.length %>)</h3>
+<h3 class="text-sm font-bold text-white mb-3 font-mono"><i class="fas fa-terminal text-primary mr-2"></i>YANITLAR [<%= replies.length %>]</h3>
 <div class="space-y-3 mb-6">
   <% replies.forEach(r => { %>
-    <div class="bg-panel rounded-lg border border-border p-4">
-      <div class="flex justify-between items-center mb-2 border-b border-border pb-2">
-        <a href="/profile/<%= r.username %>" class="text-sm text-primary font-bold"><i class="fas fa-user-circle mr-1"></i><%= r.username %></a>
-        <span class="text-xs text-gray-500"><%= new Date(r.created_at).toLocaleString('tr-TR') %></span>
+    <div class="bg-panel border <%= r.role === 'admin' ? 'border-danger/50 shadow-[0_0_10px_rgba(255,0,60,0.1)]' : 'border-border' %> p-4">
+      <div class="flex justify-between items-center mb-2 border-b border-border pb-2 font-mono">
+        <a href="/profile/<%= r.username %>" class="text-xs text-primary font-bold flex items-center gap-2">
+          <i class="fas fa-user-ninja"></i> <%= r.username %>
+          <% if(r.role === 'admin') { %><span class="bg-danger text-white text-[9px] px-1.5 py-0.5">ROOT</span><% } %>
+        </a>
+        <span class="text-[10px] text-gray-500"><%= new Date(r.created_at).toLocaleString('tr-TR') %></span>
       </div>
-      <p class="text-gray-300 text-sm"><%= r.body %></p>
-      <% if(r.signature) { %><div class="mt-3 pt-2 border-t border-border text-xs text-gray-500 italic"><%= r.signature %></div><% } %>
+      <div class="markdown-body text-gray-300 text-sm"><%- parseMarkdown(r.body) %></div>
     </div>
   <% }) %>
 </div>
 
-<% if (thread.is_locked) { %>
-  <div class="bg-red-500/10 border border-red-500/50 text-red-500 p-4 rounded text-center text-sm"><i class="fas fa-lock mr-2"></i>Bu konu kilitlenmiştir, yanıt yazılamaz.</div>
-<% } else if (user) { %>
-  <form method="post" action="/thread/<%= thread.id %>/reply" class="bg-panel rounded-lg border border-border p-4">
-    <textarea name="body" required placeholder="Yanıtınızı yazın..." class="w-full bg-darkbg border border-border rounded p-3 text-white text-sm focus:outline-none focus:border-primary mb-3" rows="4"></textarea>
-    <button type="submit" class="bg-primary text-black font-bold px-4 py-2 rounded text-sm hover:bg-white transition"><i class="fas fa-paper-plane mr-1"></i>Gönder</button>
+<% if (!thread.is_locked && user) { %>
+  <form method="post" action="/thread/<%= thread.id %>/reply" class="bg-panel border border-border p-4 neon-border">
+    <textarea name="body" required placeholder="Yanıt kodunu gir..." class="w-full bg-black border border-border rounded-none p-3 text-primary font-mono text-sm focus:outline-none focus:border-primary mb-3" rows="4"></textarea>
+    <button type="submit" class="bg-primary text-black font-bold px-6 py-2 text-sm hover:bg-white transition font-mono"><i class="fas fa-paper-plane mr-1"></i>GÖNDER</button>
   </form>
+<% } else if (thread.is_locked) { %>
+  <div class="bg-danger/10 border border-danger/50 text-danger p-4 text-center text-sm font-mono"><i class="fas fa-lock mr-2"></i>BU KONU KİLİTLENMİŞTİR.</div>
 <% } %>
