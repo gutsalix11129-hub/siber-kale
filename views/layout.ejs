@@ -6,118 +6,132 @@
   <title><%= title %> | NullSec</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
   <script>
-    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { darkbg: '#0a0a0a', panel: '#121212', panelLight: '#1a1a1a', border: '#2d2d2d', primary: '#00ff41', accent: '#ff003c' } } } }
+    tailwind.config = { 
+      darkMode: 'class', 
+      theme: { extend: { colors: { darkbg: '#050505', panel: '#0d0d0d', panelLight: '#151515', border: '#2a2a2a', primary: '#00ff41', accent: '#00e5ff', danger: '#ff003c' }, fontFamily: { mono: ['"Share Tech Mono"', 'monospace'], sans: ['"Chakra Petch"', 'sans-serif'] } } } 
+    }
   </script>
   <style>
-    body { background-color: #0a0a0a; color: #a3a3a3; font-family: 'Inter', sans-serif; }
-    .forum-row:hover { background-color: #1a1a1a; }
-    .markdown-body pre { background: #000; padding: 15px; border-radius: 6px; border: 1px solid #333; color: #00ff41; overflow-x: auto; }
+    body { background-color: #050505; color: #a3a3a3; font-family: 'Chakra Petch', sans-serif; }
+    .neon-text { text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41; }
+    .neon-border { box-shadow: 0 0 5px rgba(0, 255, 65, 0.2), inset 0 0 5px rgba(0, 255, 65, 0.1); }
+    .markdown-body pre { background: #000 !important; border: 1px solid #2a2a2a; border-left: 3px solid #00ff41; padding: 15px; border-radius: 4px; overflow-x: auto; color: #00ff41; font-family: 'Share Tech Mono', monospace; }
+    ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-track { background: #0d0d0d; } ::-webkit-scrollbar-thumb { background: #00ff41; border-radius: 3px; }
   </style>
 </head>
 <body class="antialiased">
-  
-  <!-- ÜST BANT -->
-  <div class="bg-black border-b border-border text-xs py-1.5 px-4 flex justify-between items-center text-gray-500">
+
+  <div class="bg-black border-b border-border text-[11px] py-1 px-4 flex justify-between items-center text-gray-500 font-mono tracking-widest uppercase">
+    <div class="flex gap-4"><span class="text-primary neon-text">> SYS_STATUS: ONLINE</span><span>|</span><span>> ROOT_ACCESS: GRANTED</span></div>
     <div class="flex gap-4">
-      <span><i class="fas fa-terminal text-primary mr-1"></i> NullSec Ağı</span>
-    </div>
-    <div class="flex gap-4">
-      <% if (user) { %>
-        <span>Hoş geldin, <a href="/profile/<%= user.username %>" class="text-primary hover:underline font-bold"><%= user.username %></a></span>
-      <% } else { %>
-        <a href="/login" class="hover:text-white">Giriş Yap</a>
-        <a href="/register" class="hover:text-white">Kayıt Ol</a>
-      <% } %>
+      <% if (user) { %><span>> USER: <a href="/profile/<%= user.username %>" class="text-accent hover:underline"><%= user.username %></a></span>
+      <% } else { %><a href="/login" class="hover:text-white">> LOGIN</a><a href="/register" class="hover:text-white">> REGISTER</a><% } %>
     </div>
   </div>
 
-  <!-- NAVBAR -->
-  <nav class="bg-panel border-b border-border sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="/" class="text-3xl font-black text-white tracking-widest italic">NULL<span class="text-primary">SEC</span></a>
-      
-      <div class="flex-1 max-w-xl mx-8">
-        <form action="/search" method="GET" class="relative">
-          <input name="q" placeholder="Konu, mesaj veya kullanıcı ara..." class="w-full bg-[#0a0a0a] border border-border rounded-md px-4 py-2 text-sm text-white focus:outline-none focus:border-primary transition">
-          <button type="submit" class="absolute right-2 top-2.5 text-gray-500 hover:text-primary"><i class="fas fa-search"></i></button>
+  <nav class="bg-panel border-b border-border sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
+      <a href="/" class="text-4xl font-black text-white tracking-[0.2em] italic flex items-center gap-2"><i class="fas fa-skull text-primary neon-text"></i>NULL<span class="text-primary neon-text">SEC</span></a>
+      <div class="flex-1 max-w-2xl mx-8">
+        <form action="/search" method="GET" class="relative group">
+          <input name="q" placeholder="Sistemde ara..." class="w-full bg-darkbg border border-border rounded-none px-4 py-3 text-sm text-white focus:outline-none focus:border-primary transition font-mono">
+          <button type="submit" class="absolute right-3 top-3.5 text-gray-500 group-hover:text-primary transition"><i class="fas fa-search"></i></button>
         </form>
       </div>
-
-      <div class="flex items-center space-x-5">
+      <div class="flex items-center space-x-6">
         <% if (user) { %>
-          <a href="/notifications" class="relative text-gray-400 hover:text-primary transition">
-            <i class="fas fa-bell text-xl"></i>
-            <% if (unreadNotifs > 0) { %><span class="absolute -top-1.5 -right-1.5 bg-accent text-white text-[10px] font-bold px-1.5 rounded-full"><%= unreadNotifs %></span><% } %>
+          <a href="/notifications" class="relative text-gray-400 hover:text-primary"><i class="fas fa-bell text-xl"></i><% if (unreadNotifs > 0) { %><span class="absolute -top-1.5 -right-1.5 bg-danger text-white text-[10px] px-1.5 rounded-full"><%= unreadNotifs %></span><% } %></a>
+          <a href="/messages" class="relative text-gray-400 hover:text-primary"><i class="fas fa-envelope text-xl"></i><% if (unreadPMs > 0) { %><span class="absolute -top-1.5 -right-1.5 bg-danger text-white text-[10px] px-1.5 rounded-full"><%= unreadPMs %></span><% } %></a>
+          <a href="/profile/<%= user.username %>" class="flex items-center gap-3 bg-panelLight border border-border px-3 py-1.5 hover:border-primary transition neon-border">
+            <img src="https://ui-avatars.com/api/?name=<%= user.username %>&background=000&color=00ff41&bold=true" class="w-8 h-8 rounded-none border border-border">
+            <div class="flex flex-col text-left"><span class="text-sm font-bold text-white leading-none"><%= user.username %></span><span class="text-[10px] text-primary font-mono mt-1"><%= getRank(user.points).name %></span></div>
           </a>
-          <a href="/messages" class="relative text-gray-400 hover:text-primary transition">
-            <i class="fas fa-envelope text-xl"></i>
-            <% if (unreadPMs > 0) { %><span class="absolute -top-1.5 -right-1.5 bg-accent text-white text-[10px] font-bold px-1.5 rounded-full"><%= unreadPMs %></span><% } %>
-          </a>
-          <a href="/profile/<%= user.username %>" class="flex items-center gap-3 border border-border rounded-full pl-1 pr-3 py-1 bg-[#1a1a1a] hover:border-primary transition">
-            <img src="https://ui-avatars.com/api/?name=<%= user.username %>&background=000&color=00ff41" class="w-7 h-7 rounded-full">
-            <span class="text-sm font-bold text-white"><%= user.username %></span>
-          </a>
+          <% if(user.role === 'admin') { %><a href="/admin" class="text-danger hover:text-white transition"><i class="fas fa-terminal text-xl"></i></a><% } %>
+          <form method="post" action="/logout"><button type="submit" class="text-gray-500 hover:text-danger transition"><i class="fas fa-power-off text-xl"></i></button></form>
+        <% } else { %>
+          <a href="/login" class="text-gray-300 font-bold hover:text-white font-mono">Giriş</a>
+          <a href="/register" class="bg-primary text-black px-6 py-2 font-bold hover:bg-white transition neon-border">Kayıt</a>
         <% } %>
       </div>
     </div>
   </nav>
 
-  <!-- ANA İÇERİK -->
-  <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-6">
-    
+  <div class="max-w-7xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-6">
     <main class="flex-1 min-w-0"><%- body %></main>
-
-    <!-- SAĞ SİDEBAR -->
-    <aside class="w-full md:w-80 flex-shrink-0 space-y-4">
-      
-      <!-- İSTATİSTİKLER -->
-      <div class="bg-panel border border-border rounded-md overflow-hidden">
-        <div class="bg-panelLight px-4 py-2.5 border-b border-border text-sm font-bold text-white flex items-center gap-2">
-          <i class="fas fa-chart-line text-primary"></i> Forum İstatistikleri
-        </div>
-        <div class="p-3 text-sm space-y-2">
-          <div class="flex justify-between border-b border-border pb-1"><span class="text-gray-500">Toplam Üye:</span> <span class="text-primary font-bold"><%= stats.users %></span></div>
-          <div class="flex justify-between border-b border-border pb-1"><span class="text-gray-500">Toplam Konu:</span> <span class="text-primary font-bold"><%= stats.posts %></span></div>
-          <div class="flex justify-between"><span class="text-gray-500">Toplam Mesaj:</span> <span class="text-primary font-bold"><%= stats.replies %></span></div>
+    <aside class="w-full md:w-80 flex-shrink-0 space-y-6">
+      <div class="bg-panel border border-border overflow-hidden neon-border">
+        <div class="bg-panelLight px-4 py-3 border-b border-border text-xs font-bold text-white flex items-center gap-2 font-mono"><i class="fas fa-chart-bar text-primary"></i> SYS_STATS</div>
+        <div class="p-4 text-sm space-y-3 font-mono">
+          <div class="flex justify-between border-b border-border pb-1"><span class="text-gray-500">Üye:</span> <span class="text-primary neon-text"><%= stats.users %></span></div>
+          <div class="flex justify-between border-b border-border pb-1"><span class="text-gray-500">Konu:</span> <span class="text-primary neon-text"><%= stats.posts %></span></div>
+          <div class="flex justify-between"><span class="text-gray-500">Mesaj:</span> <span class="text-primary neon-text"><%= stats.replies %></span></div>
         </div>
       </div>
-
-      <!-- ÇEVRİMİÇİ -->
-      <div class="bg-panel border border-border rounded-md overflow-hidden">
-        <div class="bg-panelLight px-4 py-2.5 border-b border-border text-sm font-bold text-white flex items-center gap-2">
-          <i class="fas fa-users text-primary"></i> Çevrimiçi Kullanıcılar
-        </div>
-        <div class="p-3 text-sm text-gray-400 flex flex-wrap gap-2">
-          <% onlineUsers.forEach(u => { %>
-            <a href="/profile/<%= u.username %>" class="hover:text-primary transition"><%= u.username %></a>,
-          <% }) %>
+      <div class="bg-panel border border-border overflow-hidden">
+        <div class="bg-panelLight px-4 py-3 border-b border-border text-xs font-bold text-white flex items-center gap-2 font-mono"><i class="fas fa-users text-accent"></i> ONLINE_USERS</div>
+        <div class="p-4 text-sm text-gray-400 flex flex-wrap gap-2 font-mono">
+          <% onlineUsers.forEach(u => { %><a href="/profile/<%= u.username %>" class="hover:text-accent transition"><%= u.username %></a>,<% }) %>
         </div>
       </div>
-
-      <!-- SHOUTBOX -->
-      <div class="bg-panel border border-border rounded-md overflow-hidden">
-        <div class="bg-panelLight px-4 py-2.5 border-b border-border text-sm font-bold text-white flex items-center gap-2">
-          <i class="fas fa-comments text-primary"></i> Anlık Sohbet (Shoutbox)
-        </div>
-        <div class="p-3 h-56 overflow-y-auto space-y-1.5 text-sm flex flex-col justify-end custom-scrollbar">
-          <% shoutbox.forEach(s => { %>
-            <div class="break-words bg-[#0a0a0a] p-1.5 rounded"><span class="text-primary font-bold text-xs"><%= s.username %>:</span> <span class="text-gray-300"><%= s.message %></span></div>
-          <% }) %>
+      <div class="bg-panel border border-border overflow-hidden neon-border">
+        <div class="bg-panelLight px-4 py-3 border-b border-border text-xs font-bold text-white flex items-center justify-between font-mono"><span><i class="fas fa-terminal text-primary"></i> SHOUTBOX</span><span class="text-[9px] text-gray-500 animate-pulse">● LIVE</span></div>
+        <div class="p-3 h-64 overflow-y-auto space-y-2 text-sm flex flex-col justify-end font-mono">
+          <% shoutbox.forEach(s => { %><div class="break-words bg-darkbg p-2 border-l-2 border-primary"><span class="text-primary font-bold text-xs">[<%= s.username %>]:</span> <span class="text-gray-300"><%= s.message %></span></div><% }) %>
         </div>
         <% if (user) { %>
-          <form method="post" action="/shoutbox" class="p-2 border-t border-border flex gap-1">
-            <input name="message" placeholder="Mesaj yaz..." required maxlength="100" class="flex-1 bg-[#0a0a0a] border border-border rounded px-2 py-1 text-sm text-white focus:outline-none focus:border-primary">
-            <button type="submit" class="bg-primary text-black px-3 rounded hover:bg-white transition"><i class="fas fa-paper-plane"></i></button>
+          <form method="post" action="/shoutbox" class="p-2 border-t border-border flex gap-1 bg-black">
+            <input name="message" placeholder="Komut gir..." required maxlength="100" class="flex-1 bg-darkbg border border-border rounded-none px-2 py-1.5 text-sm text-white focus:outline-none focus:border-primary font-mono">
+            <button type="submit" class="bg-primary text-black px-3 rounded-none hover:bg-white transition"><i class="fas fa-paper-plane"></i></button>
           </form>
         <% } %>
       </div>
-
     </aside>
   </div>
 
-  <footer class="border-t border-border mt-10 py-6 text-center text-gray-600 text-xs">
-    <p>NullSec &copy; 2024 - Gelişmiş Siber Güvenlik Platformu. Tüm hakları saklıdır.</p>
-  </footer>
+  <!-- YAPAY ZEKA CHAT BALONU -->
+  <div id="ai-chat-widget" class="fixed bottom-6 right-6 z-50">
+    <div id="ai-chat-window" class="hidden bg-panel border border-primary w-80 h-96 rounded-none shadow-[0_0_20px_rgba(0,255,65,0.2)] flex flex-col mb-4 overflow-hidden">
+      <div class="bg-panelLight p-3 border-b border-border flex justify-between items-center">
+        <div class="flex items-center gap-2 text-white font-bold font-mono"><i class="fas fa-robot text-primary"></i> NULLSEC_AI</div>
+        <button onclick="toggleAI()" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+      </div>
+      <div id="ai-messages" class="flex-1 p-3 overflow-y-auto space-y-3 custom-scrollbar text-sm font-mono">
+        <div class="bg-[#1a1a1a] text-gray-300 p-2 rounded-none border-l-2 border-primary">Sistem hazır. Bana siber güvenlik veya kodlama hakkında her şeyi sorabilirsin. 🚀</div>
+      </div>
+      <form id="ai-form" class="p-2 border-t border-border flex gap-2 bg-black">
+        <input id="ai-input" placeholder="Komut gir..." required class="flex-1 bg-darkbg border border-border rounded-none px-2 py-1.5 text-sm text-white focus:outline-none focus:border-primary font-mono">
+        <button type="submit" class="bg-primary text-black px-3 rounded-none hover:bg-white transition"><i class="fas fa-paper-plane"></i></button>
+      </form>
+    </div>
+    <button onclick="toggleAI()" class="bg-primary text-black w-14 h-14 rounded-none shadow-[0_0_15px_rgba(0,255,65,0.5)] flex items-center justify-center hover:scale-110 transition ml-auto border border-white"><i class="fas fa-robot text-2xl"></i></button>
+  </div>
+
+  <script>
+    function toggleAI() { document.getElementById('ai-chat-window').classList.toggle('hidden'); }
+    document.getElementById('ai-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('ai-input');
+      const msgContainer = document.getElementById('ai-messages');
+      const msg = input.value.trim(); if(!msg) return;
+      
+      msgContainer.innerHTML += `<div class="bg-primary/20 text-white p-2 rounded-none border border-primary/30 text-right ml-4">${msg}</div>`;
+      input.value = ''; msgContainer.scrollTop = msgContainer.scrollHeight;
+
+      const loadingId = 'loading-' + Date.now();
+      msgContainer.innerHTML += `<div id="${loadingId}" class="text-primary text-xs animate-pulse">> İşleniyor...</div>`;
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+
+      try {
+        const response = await fetch('/api/ai-chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: msg }) });
+        const data = await response.json();
+        document.getElementById(loadingId).remove();
+        msgContainer.innerHTML += `<div class="bg-[#1a1a1a] text-gray-300 p-2 rounded-none border-l-2 border-primary">${data.reply}</div>`;
+      } catch (err) { document.getElementById(loadingId).remove(); msgContainer.innerHTML += `<div class="text-danger text-xs">Bağlantı hatası.</div>`; }
+      msgContainer.scrollTop = msgContainer.scrollHeight;
+    });
+  </script>
 </body>
 </html>
