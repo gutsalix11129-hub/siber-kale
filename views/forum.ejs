@@ -1,0 +1,29 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-xl font-bold text-white font-mono"><i class="fas <%= forum.icon %> text-primary mr-2"></i><%= forum.name.toUpperCase() %></h1>
+  <% if(user) { %><a href="/new-thread" class="bg-primary text-black font-bold px-4 py-2 text-sm hover:bg-white transition neon-border">+ KONU AÇ</a><% } %>
+</div>
+
+<div class="bg-panel border border-border overflow-hidden neon-border">
+  <div class="bg-panelLight px-4 py-2 border-b border-border text-xs font-bold text-gray-400 font-mono tracking-widest uppercase">> Konular</div>
+  <div class="divide-y divide-border">
+    <% if (threads.length === 0) { %><div class="p-8 text-center text-gray-500 font-mono">Bu kategoride henüz veri yok.</div><% } %>
+    <% threads.forEach(t => { %>
+      <div class="p-4 hover:bg-[#1a1a1a] transition flex items-center gap-4 font-mono">
+        <div class="w-10 h-10 bg-black border border-border flex items-center justify-center text-primary flex-shrink-0"><i class="fas fa-file-code"></i></div>
+        <div class="flex-1">
+          <a href="/thread/<%= t.id %>" class="text-white font-bold hover:text-primary transition text-sm">
+            <% if (t.is_pinned) { %><span class="text-primary text-xs mr-1"><i class="fas fa-thumbtack"></i></span><% } %>
+            <% if (t.is_locked) { %><span class="text-danger text-xs mr-1"><i class="fas fa-lock"></i></span><% } %>
+            <% if (t.prefix) { %><span class="text-[10px] bg-[#21262d] text-accent border border-border px-1.5 py-0.5 rounded mr-2"><%= t.prefix %></span><% } %>
+            <%= t.title %>
+          </a>
+          <div class="text-xs text-gray-500 mt-1">
+            Yazar: <a href="/profile/<%= t.username %>" class="text-primary hover:underline"><%= t.username %></a> - <%= new Date(t.created_at).toLocaleString('tr-TR') %>
+          </div>
+        </div>
+        <div class="text-center px-4 border-l border-border hidden md:block"><div class="text-white font-bold"><%= t.reply_count %></div><div class="text-[10px] text-gray-500">YANIT</div></div>
+        <div class="text-center px-4 border-l border-border hidden md:block"><div class="text-white font-bold"><%= t.views %></div><div class="text-[10px] text-gray-500">OKUNMA</div></div>
+      </div>
+    <% }) %>
+  </div>
+</div>
